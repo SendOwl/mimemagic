@@ -780,7 +780,7 @@
     <acronym>PDF</acronym>
     <expanded-acronym>Portable Document Format</expanded-acronym>
     <generic-icon name="x-office-document"/>
-    <magic priority="50">
+    <magic priority="30">
       <match value="%PDF-" type="string" offset="0:1024"/>
     </magic>
     <glob pattern="*.pdf"/>
