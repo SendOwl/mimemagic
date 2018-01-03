@@ -115,7 +115,15 @@ class MimeMagic
     io.set_encoding(Encoding::BINARY) if io.respond_to?(:set_encoding)
     buffer = "".force_encoding(Encoding::BINARY)
 
-    MAGIC.send(method) { |type, matches| magic_match_io(io, matches, buffer) }
+    if magic_result = MAGIC.send(method) { |type, matches| magic_match_io(io, matches, buffer) }
+      # We can't detect using magic whether a file is xlsx or xlsm as the matchers don't allow us to be precise enough
+      # so instead we catch xlsx files and check the file extension.
+      if magic_result.first == 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' && io.respond_to?(:path)
+        magic_result = MAGIC.send(method) { |type| type.first == 'application/vnd.ms-excel.sheet.macroEnabled.12' } if io.path.match?(/\.xlsm$/)
+      end
+    end
+
+    magic_result
   end
 
   def self.magic_match_io(io, matches, buffer)
