@@ -121,6 +121,12 @@ class MimeMagic
       if magic_result.first == 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' && io.respond_to?(:path)
         magic_result = MAGIC.send(method) { |type| type.first == 'application/vnd.ms-excel.sheet.macroEnabled.12' } if io.path.match?(/\.xlsm$/)
       end
+
+      if magic_result.first == 'application/zip' && io.respond_to?(:path)
+        magic_result = MAGIC.send(method) { |type| type.first == 'application/vnd.openxmlformats-officedocument.presentationml.presentation' } if io.path.match?(/\.pptx$/)
+      end
+
+      magic_result
     end
 
     magic_result
@@ -141,6 +147,8 @@ class MimeMagic
       match && (!children || magic_match_io(io, children, buffer))
     end
   end
+
+  # MimeMagic.by_magic(File.open("spec/fixtures/files/application.vnd.openxmlformats-officedocument.presentationml.presentation", "rb"))
 
   private_class_method :magic_match, :magic_match_io
 end

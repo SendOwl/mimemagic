@@ -1,8 +1,8 @@
-task :default => %w(test)
-
-desc 'Run tests with bacon'
-task :test => FileList['test/*_test.rb'] do |t|
-  sh "bacon -q -Ilib:test #{t.prerequisites.join(' ')}"
+begin
+  require 'rspec/core/rake_task'
+  RSpec::Core::RakeTask.new(:spec)
+  task :default => %w(spec)
+rescue LoadError
 end
 
 desc 'Generate mime tables'
