@@ -76,7 +76,7 @@ RSpec.describe 'MimeMagic' do
   it 'should recognize a weirdly formatted pptx with overlay, but only if we can see the file path' do
     require "mimemagic/overlay"
 
-    file = "spec/fixtures/bad_magic_files/big.pptx"
+    file = "spec/fixtures/bad_magic_files/sample.pptx"
     expect(MimeMagic.by_magic(File.read(file))).to eq 'application/zip'
     expect(MimeMagic.by_magic(File.open(file, 'rb'))).to eq 'application/vnd.openxmlformats-officedocument.presentationml.presentation'
   end
