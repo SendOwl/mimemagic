@@ -85,9 +85,16 @@ RSpec.describe 'MimeMagic' do
     require "mimemagic/overlay"
     Dir['spec/fixtures/files/*'].each do |file|
       mime = File.split(file).last.sub('.', '/')
-      expect(MimeMagic.by_magic(File.read(file))).to eq(mime), 'This can happen if you add a file to spec/fixtures/files and the detection code relies on the file extension and your file does not have one'
-      expect(MimeMagic.by_magic(File.open(file, 'rb'))).to eq(mime), 'This can happen if you add a file to spec/fixtures/files and the detection code relies on the file extension and your file does not have one'
+      expect(MimeMagic.by_magic(File.read(file))).to eq(mime), "#{file} is not a #{mime}. This can happen if you add a file to spec/fixtures/files and the detection code relies on the file extension and your file does not have one"
+      expect(MimeMagic.by_magic(File.open(file, 'rb'))).to eq(mime), "#{file} is not a #{mime}. This can happen if you add a file to spec/fixtures/files and the detection code relies on the file extension and your file does not have one"
     end
+  end
+
+  it 'should recognize xmp' do
+    require "mimemagic/overlay"
+
+    file = "spec/fixtures/bad_magic_files/sample.xmp"
+    expect(MimeMagic.by_magic(File.read(file))).to eq 'application/octet-stream'
   end
 
   it 'should recognize all by magic' do
