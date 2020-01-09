@@ -1,4 +1,5 @@
-# -*- encoding: utf-8 -*-
+# frozen_string_literal: true
+
 require File.dirname(__FILE__) + '/lib/mimemagic/version'
 require 'date'
 
@@ -11,7 +12,7 @@ Gem::Specification.new do |s|
   s.email = ['mail@daniel-mendler.de']
 
   s.files         = `git ls-files`.split("\n")
-  s.require_paths = %w(lib)
+  s.require_paths = %w[lib]
 
   s.rubyforge_project = s.name
   s.summary = 'Fast mime detection by extension or content'
@@ -20,8 +21,8 @@ Gem::Specification.new do |s|
   s.license = 'MIT'
 
   s.add_development_dependency('bacon')
-  s.add_development_dependency('rspec')
-  s.add_development_dependency('rake')
   s.add_development_dependency('nokogiri')
   s.add_development_dependency('pry')
+  s.add_development_dependency('rake')
+  s.add_development_dependency('rspec')
 end
