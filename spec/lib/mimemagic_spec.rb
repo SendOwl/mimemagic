@@ -100,6 +100,12 @@ RSpec.describe 'MimeMagic' do
     expect(MimeMagic.by_magic(File.read(file))).to eq 'application/vnd.wolfram.cdf.text'
   end
 
+  it 'should recognize Adobe digital negatives (dng)' do
+    require 'mimemagic/overlay'
+    file = 'spec/fixtures/bad_magic_files/sample.dng'
+    expect(MimeMagic.by_magic(File.read(file))).to eq 'image/x-adobe-dng'
+  end
+
   it 'should recognize xmp' do
     require 'mimemagic/overlay'
     file = 'spec/fixtures/bad_magic_files/sample.xmp'
