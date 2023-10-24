@@ -1,7 +1,7 @@
-require 'mimemagic/tables'
-require 'mimemagic/version'
+require "mimemagic/tables"
+require "mimemagic/version"
 
-require 'stringio'
+require "stringio"
 
 # Mime type detection
 class MimeMagic
@@ -10,7 +10,7 @@ class MimeMagic
   # Mime type by type string
   def initialize(type)
     @type = type
-    @mediatype, @subtype = type.split('/', 2)
+    @mediatype, @subtype = type.split("/", 2)
   end
 
   # Add custom mime type. Arguments:
@@ -25,9 +25,9 @@ class MimeMagic
   def self.add(type, options)
     extensions = [options[:extensions]].flatten.compact
     TYPES[type] = [extensions,
-                  [options[:parents]].flatten.compact,
-                  options[:comment]]
-    extensions.each {|ext| EXTENSIONS[ext] = type }
+                   [options[:parents]].flatten.compact,
+                   options[:comment]]
+    extensions.each { |ext| EXTENSIONS[ext] = type }
     MAGIC.unshift [type, options[:magic]] if options[:magic]
   end
 
@@ -35,18 +35,28 @@ class MimeMagic
   # you're seeing impossible conflicts (for instance, application/x-gmc-link).
   # * <i>type</i>: The mime type to remove.  All associated extensions and magic are removed too.
   def self.remove(type)
-    EXTENSIONS.delete_if {|ext, t| t == type }
-    MAGIC.delete_if {|t, m| t == type }
+    EXTENSIONS.delete_if { |ext, t| t == type }
+    MAGIC.delete_if { |t, m| t == type }
     TYPES.delete(type)
   end
 
   # Returns true if type is a text format
-  def text?; mediatype == 'text' || child_of?('text/plain'); end
+  def text?
+    mediatype == "text" || child_of?("text/plain")
+  end
 
   # Mediatype shortcuts
-  def image?; mediatype == 'image'; end
-  def audio?; mediatype == 'audio'; end
-  def video?; mediatype == 'video'; end
+  def image?
+    mediatype == "image"
+  end
+
+  def audio?
+    mediatype == "audio"
+  end
+
+  def video?
+    mediatype == "video"
+  end
 
   # Returns true if type is child of parent type
   def child_of?(parent)
@@ -66,7 +76,7 @@ class MimeMagic
   # Lookup mime type by file extension
   def self.by_extension(ext)
     ext = ext.to_s.downcase
-    mime = ext[0..0] == '.' ? EXTENSIONS[ext[1..-1]] : EXTENSIONS[ext]
+    mime = ext[0..0] == "." ? EXTENSIONS[ext[1..-1]] : EXTENSIONS[ext]
     mime && new(mime)
   end
 
@@ -105,7 +115,7 @@ class MimeMagic
   alias == eql?
 
   def self.child?(child, parent)
-    child == parent || TYPES.key?(child) && TYPES[child][1].any? {|p| child?(p, parent) }
+    child == parent || TYPES.key?(child) && TYPES[child][1].any? { |p| child?(p, parent) }
   end
 
   def self.magic_match(io, method)
@@ -118,12 +128,12 @@ class MimeMagic
     if magic_result = MAGIC.send(method) { |type, matches| magic_match_io(io, matches, buffer) }
       # We can't detect using magic whether a file is xlsx or xlsm as the matchers don't allow us to be precise enough
       # so instead we catch xlsx files and check the file extension.
-      if magic_result.first == 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' && io.respond_to?(:path)
-        magic_result = MAGIC.send(method) { |type| type.first == 'application/vnd.ms-excel.sheet.macroEnabled.12' } if io.path.match?(/\.xlsm$/)
+      if magic_result.first == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" && io.respond_to?(:path)
+        magic_result = MAGIC.send(method) { |type| type.first == "application/vnd.ms-excel.sheet.macroEnabled.12" } if io.path.match?(/\.xlsm$/)
       end
 
-      if magic_result.first == 'application/zip' && io.respond_to?(:path)
-        magic_result = MAGIC.send(method) { |type| type.first == 'application/vnd.openxmlformats-officedocument.presentationml.presentation' } if io.path.match?(/\.pptx$/)
+      if magic_result.first == "application/zip" && io.respond_to?(:path)
+        magic_result = MAGIC.send(method) { |type| type.first == "application/vnd.openxmlformats-officedocument.presentationml.presentation" } if io.path.match?(/\.pptx$/)
       end
 
       magic_result
