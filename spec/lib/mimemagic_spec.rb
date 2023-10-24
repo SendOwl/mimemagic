@@ -116,6 +116,12 @@ RSpec.describe "MimeMagic" do
     expect(MimeMagic.by_magic(File.read(file))).to eq "application/octet-stream"
   end
 
+  it "should recognize an Anki apkg file" do
+    require "mimemagic/overlay"
+    file = "spec/fixtures/bad_magic_files/sample.apkg"
+    expect(MimeMagic.by_magic(File.read(file))).to eq "application/octet-stream"
+  end
+
   it "should recognize all by magic" do
     require "mimemagic/overlay"
     file = "spec/fixtures/files/application.vnd.openxmlformats-officedocument.spreadsheetml.sheet"

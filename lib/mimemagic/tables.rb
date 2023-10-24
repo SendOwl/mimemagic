@@ -43,6 +43,7 @@ class MimeMagic
     "anx" => "application/annodex",
     "ape" => "audio/x-ape",
     "apk" => "application/vnd.android.package-archive",
+    "apkg" => "application/octet-stream",
     "ar" => "application/x-archive",
     "arj" => "application/x-arj",
     "arw" => "image/x-sony-arw",
