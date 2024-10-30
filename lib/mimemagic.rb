@@ -133,7 +133,13 @@ class MimeMagic
       end
 
       if magic_result.first == "application/zip" && io.respond_to?(:path)
-        magic_result = MAGIC.send(method) { |type| type.first == "application/vnd.openxmlformats-officedocument.presentationml.presentation" } if io.path.match?(/\.pptx$/)
+        magic_result = if io.path.match?(/\.docx\Z/)
+          MAGIC.send(method) { |type| type.first == "application/vnd.openxmlformats-officedocument.wordprocessingml.document" }
+        elsif io.path.match?(/\.pptx\Z/)
+          MAGIC.send(method) { |type| type.first == "application/vnd.openxmlformats-officedocument.presentationml.presentation" }
+        else
+          magic_result
+        end
       end
 
       magic_result

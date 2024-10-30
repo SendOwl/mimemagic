@@ -76,13 +76,13 @@ RSpec.describe "MimeMagic" do
                                         "rb"))).to eq "application/vnd.openxmlformats-officedocument.presentationml.presentation"
   end
 
-  it "should recognize a weirdly formatted pptx with overlay, but only if we can see the file path" do
+  it "should recognize a weirdly formatted docx with overlay, but only if we can see the file path" do
     require "mimemagic/overlay"
 
-    file = "spec/fixtures/bad_magic_files/sample.pptx"
+    file = "spec/fixtures/bad_magic_files/sample.docx"
     expect(MimeMagic.by_magic(File.read(file))).to eq "application/zip"
     expect(MimeMagic.by_magic(File.open(file,
-                                        "rb"))).to eq "application/vnd.openxmlformats-officedocument.presentationml.presentation"
+                                        "rb"))).to eq "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
   end
 
   it "should recognize by magic" do
